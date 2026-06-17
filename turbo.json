@@ -1,0 +1,23 @@
+{
+  "$schema": "https://turbo.build/schema.json",
+  "ui": "tui",
+  "tasks": {
+    "dev:server": {
+      "cache": false,
+      "persistent": true
+    },
+    "dev:docker": {
+      "cache": false,
+      "persistent": true
+    },
+    "build": {
+      "outputs": [
+        "dist/**"
+      ]
+    },
+    "dev:inspector": {
+      "cache": false,
+      "persistent": true
+    }
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "name": "mcp-server-workshop",
+  "version": "1.0.0",
+  "description": "Workshop: build a remote MCP server with Fastify, Keycloak auth, and MinIO storage",
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "fastify",
+    "keycloak",
+    "minio",
+    "workshop"
+  ],
+  "author": "Polarity",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Polarity/mcp-server-workshop.git"
+  },
+  "homepage": "https://github.com/Polarity/mcp-server-workshop#readme",
+  "bugs": {
+    "url": "https://github.com/Polarity/mcp-server-workshop/issues"
+  },
+  "type": "module",
+  "main": "dist/server.js",
+  "engines": {
+    "node": ">=24"
+  },
+  "packageManager": "pnpm@11.7.0",
+  "scripts": {
+    "dev": "turbo run dev:server dev:docker dev:inspector --parallel",
+    "dev:server": "tsx watch --tsconfig tsconfig.json -r tsconfig-paths/register src/server.ts",
+    "dev:docker": "docker compose up",
+    "dev:inspector": "MCP_AUTO_OPEN_ENABLED=false mcp-inspector --transport http --server-url http://localhost:3000/mcp",
+    "build": "rm -rf dist && tsc",
+    "start": "node -r tsconfig-paths/register dist/server.js",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.1069.0",
+    "@modelcontextprotocol/fastify": "2.0.0-alpha.2",
+    "@modelcontextprotocol/node": "2.0.0-alpha.2",
+    "@modelcontextprotocol/server": "2.0.0-alpha.2",
+    "fastify": "^5.8.5",
+    "fastify-plugin": "^6.0.0",
+    "jose": "^6.2.3",
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@modelcontextprotocol/inspector": "^0.22.0",
+    "@stylistic/eslint-plugin": "^5.10.0",
+    "@types/node": "^25.9.3",
+    "eslint": "^10.5.0",
+    "globals": "^17.6.0",
+    "tsconfig-paths": "^4.2.0",
+    "tsx": "^4.22.4",
+    "turbo": "^2.9.18",
+    "typescript": "^6.0.3",
+    "typescript-eslint": "^8.61.1"
+  }
+}
