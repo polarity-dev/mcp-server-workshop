@@ -31,3 +31,13 @@ export const methodNotAllowedResponse = {
   error: { code: -32000, message: "Method not allowed." },
   id: null,
 }
+
+// OAuth 2.0 Protected Resource Metadata (RFC 9728)
+export const protectedResourceMetadata = {
+  resource: `${config.baseUrl}/mcp`,
+  authorization_servers: [
+    `${config.keycloak.baseUrl}/realms/${config.keycloak.realm}`,
+  ],
+  scopes_supported: ["openid", "profile", "email"],
+  bearer_methods_supported: ["header"],
+} as const
