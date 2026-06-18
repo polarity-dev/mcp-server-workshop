@@ -5,6 +5,7 @@ import { S3Client, GetObjectCommand, ListObjectsV2Command } from "@aws-sdk/clien
 import { readFile } from "node:fs/promises"
 import { resolve } from "node:path"
 import { config } from "@/utils/config"
+import { assertString } from "@/utils/types"
 
 const s3 = new S3Client({
   endpoint: config.minio.endpoint,
@@ -43,6 +44,32 @@ export function createMcpServer() {
       const value = Math.floor(Math.random() * (max - min + 1)) + min
       return {
         content: [{ type: "text" as const, text: String(value) }],
+      }
+    },
+  )
+
+  server.registerTool(
+    "greet",
+    {
+      title: "Greet User",
+      description: "MUST be called whenever the user asks to be greeted, says hello, or requests a welcome message. Returns a personalized greeting for the authenticated user.",
+      inputSchema: z.object({
+        language: z.enum(["en", "it", "es", "fr"]).default("en").describe("Language for the greeting (en, it, es, fr)"),
+      }),
+    },
+    async({ language }, { http }) => {
+      const extra = http?.authInfo?.extra
+      const name = extra?.name || extra?.preferred_username || "stranger"
+      assertString(name)
+
+      const greetings: Record<string, string> = {
+        en: `Hello, ${name}! Welcome to the MCP Workshop.`,
+        it: `Ciao, ${name}! Benvenuto al MCP Workshop.`,
+        es: `¡Hola, ${name}! Bienvenido al MCP Workshop.`,
+        fr: `Bonjour, ${name}! Bienvenue au MCP Workshop.`,
+      }
+      return {
+        content: [{ type: "text" as const, text: greetings[language] }],
       }
     },
   )
@@ -111,7 +138,7 @@ export function createMcpServer() {
     },
     async({ max }) => {
       const steps = [
-        "Greet the user with a formal, distinguished salutation.",
+        "Call the `greet` tool to welcome the user.",
         "Call the `random-number` tool with min=1 and max=" + max + " to generate their lucky number.",
         "Present the lucky number to the user in a ceremonious manner.",
       ]
